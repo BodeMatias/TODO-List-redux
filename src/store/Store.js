@@ -6,7 +6,7 @@ let initialListState = []
 
 const ADD = "ADD"
 const DELETE = "DELETE"
-const MODIFY = "MODIFY"
+const UPDATE = "UPDATE"
 
 let addAction = (item) => {
 	return {
@@ -22,9 +22,9 @@ let deleteAction = (id) => {
 	}
 }
 
-let modifyAction = (id, description) => {
+let updateAction = (id, description) => {
 	return {
-		type: MODIFY,
+		type: UPDATE,
 		id,
 		description,
 	}
@@ -36,7 +36,7 @@ let ListReducer = (state = initialListState, action) => {
 			return [...state, action.item]
 		case DELETE:
 			return state.filter(({ id }) => id !== action.id)
-		case MODIFY:
+		case UPDATE:
 			return state.map((item) =>
 				item.id === action.id
 					? { id: item.id, description: action.description }
@@ -76,4 +76,4 @@ let reducer = combineReducers({
 
 let store = createStore(reducer)
 
-export { addAction, modifyAction, deleteAction, updateIdAction, store }
+export { addAction, updateAction, deleteAction, updateIdAction, store }

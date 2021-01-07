@@ -3,7 +3,7 @@ import "./list.css"
 import { useSelector, useDispatch } from "react-redux"
 import {
 	addAction,
-	modifyAction,
+	updateAction,
 	deleteAction,
 	updateIdAction,
 } from "../../store/Store"
@@ -53,8 +53,8 @@ const TodoList = () => {
 		dispatch(updateIdAction(elem.id))
 	}
 
-	let modifyElement = (id, description) => {
-		dispatch(modifyAction(id, description))
+	let updateElement = (id, description) => {
+		dispatch(updateAction(id, description))
 	}
 
 	let deleteElement = (id) => {
@@ -98,7 +98,7 @@ const TodoList = () => {
 
 	let handleOnSubmitNewDescription = () => {
 		focusedElement.description = newDescForm.input
-		modifyElement(focusedElement.id, focusedElement.description)
+		updateElement(focusedElement.id, focusedElement.description)
 	}
 
 	return (
