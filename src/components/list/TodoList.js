@@ -1,16 +1,9 @@
-import { React, useState } from "react"
-import "./list.css"
+import { React } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import {
-	addAction,
-	updateAction,
-	deleteAction,
-	updateIdAction,
-} from "../../store/Store"
+import { deleteAction } from "../../store/todo-list/actions"
+import { updateFocusedElem } from "../../store/focused-element/actions"
+import { openModalAction } from "../../store/modal/actions"
 
-import { Button } from "@chakra-ui/button"
-import { FormControl } from "@chakra-ui/form-control"
-import { Input } from "@chakra-ui/input"
 import {
 	IconButton,
 	Center,
@@ -19,16 +12,6 @@ import {
 	ListItem,
 	Checkbox,
 	Box,
-	useDisclosure,
-	Modal,
-	ModalOverlay,
-	ModalContent,
-	ModalHeader,
-	ModalFooter,
-	ModalBody,
-	ModalCloseButton,
-	useToast,
-	CloseButton,
 } from "@chakra-ui/react"
 
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons"
@@ -36,21 +19,12 @@ import { DeleteIcon, EditIcon } from "@chakra-ui/icons"
 const TodoList = () => {
 	const dispatch = useDispatch()
 	const list = useSelector((state) => state.list)
-	const id = useSelector((state) => state.global_id)
-
-	const [focusedElement, setFocusedElement] = useState({
-		id: 0,
-		description: "",
-	})
-
-	const { onOpen, onClose, isOpen } = useDisclosure()
-
 	let deleteElement = (id) => {
 		dispatch(deleteAction(id))
 	}
 
-	let updateElement = (id, description) => {
-		dispatch(updateAction(id, description))
+	let setFocusedElement = (id, description) => {
+		dispatch(updateFocusedElem(id, description))
 	}
 
 	return (
@@ -73,8 +47,8 @@ const TodoList = () => {
 												<div className="icon">
 													<IconButton
 														onClick={() => {
-															setFocusedElement(elem)
-															onOpen()
+															setFocusedElement(elem.id, elem.description)
+															dispatch(openModalAction())
 														}}
 														colorScheme="blue"
 														size="sm"

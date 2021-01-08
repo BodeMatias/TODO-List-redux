@@ -1,63 +1,37 @@
 import { React, useState } from "react"
-import "./list.css"
 import { useSelector, useDispatch } from "react-redux"
-import {
-	addAction,
-	updateAction,
-	deleteAction,
-	updateIdAction,
-} from "../../store/Store"
-
+import { addAction } from "../../store/todo-list/actions"
+import { updateIdAction } from "../../store/id/actions"
 import { Button } from "@chakra-ui/button"
 import { FormControl } from "@chakra-ui/form-control"
 import { Input } from "@chakra-ui/input"
-import {
-	IconButton,
-	Center,
-	Divider,
-	List,
-	ListItem,
-	Checkbox,
-	Box,
-	useDisclosure,
-	Modal,
-	ModalOverlay,
-	ModalContent,
-	ModalHeader,
-	ModalFooter,
-	ModalBody,
-	ModalCloseButton,
-	useToast,
-	CloseButton,
-} from "@chakra-ui/react"
+import { Center, useToast, CloseButton } from "@chakra-ui/react"
 
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons"
-
-let addElement = (elem) => {
+let addElement = (elem, dispatch) => {
 	dispatch(addAction(elem))
 	dispatch(updateIdAction(elem.id))
 }
 
-let handleOnChange = (event) => {
+let handleOnChange = (setForm, event) => {
 	setForm({
 		input: event.target.value,
 	})
 }
 
-let clearInput = () => {
+let clearInput = (setForm) => {
 	setForm({
 		input: "",
 	})
 }
 
-let handleOnSubmit = () => {
+let handleOnSubmit = (id, form, dispatch, toast) => {
 	let obj = {
 		id,
 		description: form.input,
 	}
 
 	obj.description
-		? addElement(obj)
+		? addElement(obj, dispatch)
 		: toast({
 				title: "",
 				description: "Cannot create empty TODO.",
@@ -67,25 +41,11 @@ let handleOnSubmit = () => {
 		  })
 }
 
-let handleNewDescription = (event) => {
-	setNewDescForm({
-		input: event.target.value,
-	})
-}
-
-let handleOnSubmitNewDescription = () => {
-	focusedElement.description = newDescForm.input
-	updateElement(focusedElement.id, focusedElement.description)
-}
-
 const Form = () => {
-	const [newDescForm, setNewDescForm] = useState({
-		input: "",
-	})
 	const [form, setForm] = useState({ input: "" })
-	const { onClose, isOpen } = useDisclosure()
+	const dispatch = useDispatch()
 	const toast = useToast()
-
+	const id = useSelector((state) => state.global_id)
 	return (
 		<>
 			<Center>
@@ -94,18 +54,17 @@ const Form = () => {
 						<div className="form">
 							<Input
 								value={form.input}
-								onChange={handleOnChange}
-								id="input-item"
+								onChange={(e) => handleOnChange(setForm, e)}
 								placeholder="Add new item"
 							/>
 							<div className="close-btn">
-								<CloseButton onClick={clearInput} />
+								<CloseButton onClick={() => clearInput(setForm)} />
 							</div>
 						</div>
 					</FormControl>
 					<Center>
 						<Button
-							onClick={() => handleOnSubmit()}
+							onClick={() => handleOnSubmit(id, form, dispatch, toast)}
 							mt={4}
 							colorScheme="teal"
 							type="submit"
@@ -118,3 +77,5 @@ const Form = () => {
 		</>
 	)
 }
+
+export default Form
