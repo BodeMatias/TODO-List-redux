@@ -7,45 +7,46 @@ import { FormControl } from "@chakra-ui/form-control"
 import { Input } from "@chakra-ui/input"
 import { Center, useToast, CloseButton } from "@chakra-ui/react"
 
-let addElement = (elem, dispatch) => {
-   dispatch(addAction(elem))
-   dispatch(updateIdAction(elem.id))
-}
-
-let handleOnChange = (setForm, event) => {
-   setForm({
-      input: event.target.value,
-   })
-}
-
-let clearInput = (setForm) => {
-   setForm({
-      input: "",
-   })
-}
-
-let handleOnSubmit = (id, form, dispatch, toast) => {
-   let obj = {
-      id,
-      description: form.input,
-   }
-
-   obj.description
-      ? addElement(obj, dispatch)
-      : toast({
-           title: "",
-           description: "Cannot create empty TODO.",
-           status: "warning",
-           duration: 4000,
-           isClosable: true,
-        })
-}
-
 const Form = () => {
    const [form, setForm] = useState({ input: "" })
    const dispatch = useDispatch()
    const toast = useToast()
    const id = useSelector((state) => state.global_id)
+
+   let addElement = (elem) => {
+      dispatch(addAction(elem))
+      dispatch(updateIdAction(elem.id))
+   }
+
+   let handleOnChange = (event) => {
+      setForm({
+         input: event.target.value,
+      })
+   }
+
+   let clearInput = () => {
+      setForm({
+         input: "",
+      })
+   }
+
+   let handleOnSubmit = () => {
+      let obj = {
+         id,
+         description: form.input,
+      }
+
+      obj.description
+         ? addElement(obj, dispatch)
+         : toast({
+              title: "",
+              description: "Cannot create empty TODO.",
+              status: "warning",
+              duration: 4000,
+              isClosable: true,
+           })
+   }
+
    return (
       <>
          <Center>
@@ -54,17 +55,17 @@ const Form = () => {
                   <div className="form">
                      <Input
                         value={form.input}
-                        onChange={(e) => handleOnChange(setForm, e)}
+                        onChange={(e) => handleOnChange(e)}
                         placeholder="Add new item"
                      />
                      <div className="close-btn">
-                        <CloseButton onClick={() => clearInput(setForm)} />
+                        <CloseButton onClick={() => clearInput()} />
                      </div>
                   </div>
                </FormControl>
                <Center>
                   <Button
-                     onClick={() => handleOnSubmit(id, form, dispatch, toast)}
+                     onClick={() => handleOnSubmit()}
                      mt={4}
                      colorScheme="teal"
                      type="submit"

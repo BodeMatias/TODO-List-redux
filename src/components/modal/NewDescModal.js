@@ -16,28 +16,6 @@ import { closeModalAction } from "../../store/modal/actions"
 import { Input } from "@chakra-ui/input"
 import { Button } from "@chakra-ui/button"
 
-let handleNewDescription = (setNewDescForm, event) => {
-   setNewDescForm({
-      input: event.target.value,
-   })
-}
-
-let updateElement = (id, description, dispatch) => {
-   dispatch(updateAction(id, description))
-}
-
-let handleOnSubmitNewDescription = (newDescForm, focusedElement, dispatch) => {
-   focusedElement.description = newDescForm.input
-   updateElement(focusedElement.id, focusedElement.description, dispatch)
-}
-
-let closeModal = (dispatch, setNewDescForm) => {
-   setNewDescForm({
-      input: " ",
-   })
-   dispatch(closeModalAction())
-}
-
 const NewDescModal = () => {
    const focusedElement = useSelector((state) => state.focused_element)
    const openModal = useSelector((state) => state.openModal)
@@ -48,6 +26,28 @@ const NewDescModal = () => {
 
    const { onClose, isOpen, onOpen } = useDisclosure()
 
+   let handleNewDescription = (event) => {
+      setNewDescForm({
+         input: event.target.value,
+      })
+   }
+
+   let updateElement = (id, description) => {
+      dispatch(updateAction(id, description))
+   }
+
+   let handleOnSubmitNewDescription = () => {
+      focusedElement.description = newDescForm.input
+      updateElement(focusedElement.id, focusedElement.description, dispatch)
+   }
+
+   let closeModal = () => {
+      setNewDescForm({
+         input: " ",
+      })
+      dispatch(closeModalAction())
+   }
+
    useEffect(() => {
       openModal && onOpen()
    }, [openModal, onOpen])
@@ -57,7 +57,7 @@ const NewDescModal = () => {
          blockScrollOnMount={false}
          isOpen={isOpen}
          onClose={() => {
-            closeModal(dispatch, setNewDescForm)
+            closeModal()
             onClose()
          }}
          isCentered
@@ -67,10 +67,7 @@ const NewDescModal = () => {
             <ModalHeader>New description</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-               <Input
-                  onChange={(e) => handleNewDescription(setNewDescForm, e)}
-                  id="new-desc"
-               />
+               <Input onChange={(e) => handleNewDescription(e)} id="new-desc" />
             </ModalBody>
 
             <ModalFooter>
@@ -79,19 +76,15 @@ const NewDescModal = () => {
                   mr={3}
                   onClick={() => {
                      onClose()
-                     closeModal(dispatch, setNewDescForm)
+                     closeModal()
                   }}
                >
                   Close
                </Button>
                <Button
                   onClick={() => {
-                     handleOnSubmitNewDescription(
-                        newDescForm,
-                        focusedElement,
-                        dispatch
-                     )
-                     closeModal(dispatch, setNewDescForm)
+                     handleOnSubmitNewDescription()
+                     closeModal()
                      onClose()
                   }}
                   colorScheme="blue"

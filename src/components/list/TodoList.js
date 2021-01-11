@@ -19,6 +19,7 @@ import { DeleteIcon, EditIcon } from "@chakra-ui/icons"
 const TodoList = () => {
    const dispatch = useDispatch()
    const list = useSelector((state) => state.list)
+
    let deleteElement = (id) => {
       dispatch(deleteAction(id))
    }
