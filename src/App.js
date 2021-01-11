@@ -5,13 +5,13 @@ import NewDescModal from "./components/modal/NewDescModal"
 import Form from "./components/form/Form"
 
 function App() {
-	return (
-		<>
-			<NewDescModal />
-			<Form />
-			<TodoList />
-		</>
-	)
+   return (
+      <>
+         <NewDescModal />
+         <Form />
+         <TodoList />
+      </>
+   )
 }
 
 export default App

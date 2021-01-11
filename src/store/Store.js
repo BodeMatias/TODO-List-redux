@@ -5,10 +5,10 @@ import { openModalReducer } from "./modal/reducer"
 import { ListReducer } from "./todo-list/reducer"
 
 let reducer = combineReducers({
-	list: ListReducer,
-	global_id: IdReducer,
-	focused_element: focusedElemReducer,
-	openModal: openModalReducer,
+   list: ListReducer,
+   global_id: IdReducer,
+   focused_element: focusedElemReducer,
+   openModal: openModalReducer,
 })
 
 let store = createStore(reducer)
